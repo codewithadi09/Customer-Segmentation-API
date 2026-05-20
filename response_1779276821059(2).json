@@ -1,0 +1,76 @@
+{
+  "filename": "sample_customers_csv.csv",
+  "total_customers": 10,
+  "segmented_customers": [
+    {
+      "customer_name": "Adi",
+      "spending_score": 95,
+      "annual_income": 120000,
+      "age": 22,
+      "cluster": 2
+    },
+    {
+      "customer_name": "Rahul",
+      "spending_score": 72,
+      "annual_income": 85000,
+      "age": 28,
+      "cluster": 1
+    },
+    {
+      "customer_name": "Priya",
+      "spending_score": 88,
+      "annual_income": 110000,
+      "age": 25,
+      "cluster": 2
+    },
+    {
+      "customer_name": "Sneha",
+      "spending_score": 45,
+      "annual_income": 40000,
+      "age": 31,
+      "cluster": 0
+    },
+    {
+      "customer_name": "Arjun",
+      "spending_score": 60,
+      "annual_income": 65000,
+      "age": 27,
+      "cluster": 0
+    },
+    {
+      "customer_name": "Neha",
+      "spending_score": 30,
+      "annual_income": 30000,
+      "age": 35,
+      "cluster": 0
+    },
+    {
+      "customer_name": "Karan",
+      "spending_score": 98,
+      "annual_income": 150000,
+      "age": 24,
+      "cluster": 2
+    },
+    {
+      "customer_name": "Ananya",
+      "spending_score": 80,
+      "annual_income": 95000,
+      "age": 26,
+      "cluster": 1
+    },
+    {
+      "customer_name": "Vikram",
+      "spending_score": 55,
+      "annual_income": 50000,
+      "age": 33,
+      "cluster": 0
+    },
+    {
+      "customer_name": "Ishita",
+      "spending_score": 20,
+      "annual_income": 25000,
+      "age": 38,
+      "cluster": 0
+    }
+  ]
+}
