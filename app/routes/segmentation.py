@@ -2,6 +2,7 @@ from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 from sqlalchemy.orm import Session
 import pandas as pd
 from sklearn.cluster import KMeans
+from typing import List
 
 from app.dependencies import get_db
 from app.models.segmentation_model import SegmentationResult
@@ -106,3 +107,83 @@ def upload_csv(
             detail=str(e)
         )
     
+@router.get("/customers")
+def get_customers(db: Session = Depends(get_db)):
+
+    customers = db.query(SegmentationResult).all()
+
+    results = []
+
+    for customer in customers:
+
+        results.append({
+            "id": customer.id,
+            "customer_name": customer.customer_name,
+            "spending_score": customer.spending_score,
+            "annual_income": customer.annual_income,
+            "cluster": customer.cluster,
+            "customer_segment": customer.customer_segment
+        })
+
+    return {
+        "total_customers": len(results),
+        "customers": results
+    }
+
+@router.get("/high-value-customers")
+def get_high_value_customers(
+    db: Session = Depends(get_db)
+):
+
+    customers = (
+        db.query(SegmentationResult)
+        .filter(
+            SegmentationResult.customer_segment == "high_value"
+        )
+        .all()
+    )
+
+    results = []
+
+    for customer in customers:
+
+        results.append({
+            "id": customer.id,
+            "customer_name": customer.customer_name,
+            "spending_score": customer.spending_score,
+            "annual_income": customer.annual_income,
+            "cluster": customer.cluster,
+            "customer_segment": customer.customer_segment
+        })
+
+    return {
+        "total_high_value_customers": len(results),
+        "customers": results
+    }
+
+@router.get("/customer/{customer_id}")
+def get_customer_by_id(
+    customer_id: int,
+    db: Session = Depends(get_db)
+):
+
+    customer = (
+        db.query(SegmentationResult)
+        .filter(SegmentationResult.id == customer_id)
+        .first()
+    )
+
+    if customer is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Customer not found"
+        )
+
+    return {
+        "id": customer.id,
+        "customer_name": customer.customer_name,
+        "spending_score": customer.spending_score,
+        "annual_income": customer.annual_income,
+        "cluster": customer.cluster,
+        "customer_segment": customer.customer_segment
+    }

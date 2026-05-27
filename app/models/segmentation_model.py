@@ -17,3 +17,4 @@ class SegmentationResult(Base):
     cluster = Column(Integer)
 
     customer_segment = Column(String)
+
