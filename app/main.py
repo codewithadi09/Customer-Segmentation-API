@@ -4,8 +4,8 @@ from app import models
 
 from app.database import engine, Base
 
-from app.routes.health import router as health_router
-from app.routes.segmentation import router as segmentation_router
+from app.routes.health_routes import router as health_router
+from app.routes.segmentation_routes import router as segmentation_router
 from app.routes.auth_routes import router as auth_router
 from app.models.user_model import User
 

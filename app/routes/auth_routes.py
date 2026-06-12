@@ -10,6 +10,9 @@ from app.auth import (
     verify_password,
     create_access_token
 )
+from app.schemas.user_schema import UserCreate, UserResponse
+from app.dependencies import get_db
+from app.services.auth_services import create_user, login_user
 
 
 router = APIRouter()
@@ -20,7 +23,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 
 
 # Database dependency
-def get_db():
+'''def get_db():
 
     db = SessionLocal()
 
@@ -29,6 +32,7 @@ def get_db():
 
     finally:
         db.close()
+        '''
 
 # Dependency to get current logged-in user
 def get_current_user(
@@ -50,50 +54,21 @@ def get_current_user(
             status_code=401,
             detail="User not found"
         )
+    print("AUTH CHECK")
 
     return user
 
-@router.post("/signup")
+@router.post(
+    "/signup",
+    response_model=UserResponse
+)
 def signup(
-    username: str,
-    password: str,
+    user: UserCreate,
     db: Session = Depends(get_db)
 ):
 
-    # Check if username already exists
-    existing_user = (
-        db.query(User)
-        .filter(User.username == username)
-        .first()
-    )
-
-    if existing_user:
-
-        raise HTTPException(
-            status_code=400,
-            detail="Username already exists"
-        )
-
-    # Hash the password
-    hashed_pw = hash_password(password)
-
-    # Create new user object
-    new_user = User(
-        username=username,
-        hashed_password=hashed_pw
-    )
-
-    # Save into database
-    db.add(new_user)
-
-    db.commit()
-
-    db.refresh(new_user)
-
-    return {
-        "message": "User created successfully",
-        "username": new_user.username
-    }
+    return create_user(user, db)
+     
 
 @router.post("/login")
 def login(
@@ -101,44 +76,19 @@ def login(
     db: Session = Depends(get_db)
 ):
 
-    user = (
-        db.query(User)
-        .filter(User.username == form_data.username)
-        .first()
+    return login_user(
+        form_data=form_data,
+        db=db
     )
 
-    if not user:
-
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid username"
-        )
-
-    if not verify_password(
-        form_data.password,
-        user.hashed_password
-    ):
-
-        raise HTTPException(
-            status_code=401,
-            detail="Invalid password"
-        )
-
-    access_token = create_access_token(
-        data={"sub": user.username}
-    )
-
-    return {
-        "access_token": access_token,
-        "token_type": "bearer"
-    }
-
-@router.get("/me")
+@router.get(
+    "/me",
+    response_model=UserResponse
+)
 def read_current_user(
     current_user: User = Depends(get_current_user)
 ):
 
-    return {
-        "id": current_user.id,
-        "username": current_user.username
-    }
+    return current_user
+
+
