@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.logger import logger
 from app.database import SessionLocal
 from app.models.user_model import User
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -54,7 +55,7 @@ def get_current_user(
             status_code=401,
             detail="User not found"
         )
-    print("AUTH CHECK")
+    logger.info("Auth check passed", extra={"username": user.username})
 
     return user
 

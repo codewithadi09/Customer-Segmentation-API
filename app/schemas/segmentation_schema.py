@@ -5,6 +5,7 @@ from typing import List
 class SegmentationResponse(BaseModel):
 
     id: int
+    customer_code: str
     customer_name: str
     spending_score: int
     annual_income: int

@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from app.database import Base
 from datetime import datetime
-from sqlalchemy import DateTime
+from sqlalchemy import Column, Integer, String, DateTime
 
 
 
@@ -11,6 +11,12 @@ class SegmentationResult(Base):
     __tablename__ = "segmentation_results"
 
     id = Column(Integer, primary_key=True, index=True)
+
+    customer_code = Column(
+        String,
+        unique=True,
+        index=True
+    )
 
     customer_name = Column(String)
 
