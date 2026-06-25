@@ -38,10 +38,25 @@ async def upload_csv(
 
 @router.get("/customers", response_model=CustomerListResponse)
 def get_customers(
+    skip: int = 0,
+    limit: int = 100,
+    segment: str | None = None,
+    search: str | None = None,
+    sort_by: str | None = None,
+    order: str = "asc",
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    return get_all_customers_service(db=db)
+    customers = get_all_customers_service(
+        skip=skip,
+        limit=limit,
+        segment=segment,
+        search=search,
+        sort_by=sort_by,
+        order=order,
+        db=db
+    )
+    return {"total_customers": len(customers), "customers": customers}
 
 
 @router.get("/high-value-customers", response_model=CustomerListResponse)

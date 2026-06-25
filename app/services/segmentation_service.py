@@ -46,7 +46,7 @@ def determine_best_k_using_silhouette_score(scaled_features):
 def segment_customers(file, db: Session):
 
     try:
-        logger.info("Starting segmentation pipeline", extra={"filename": file.filename})
+        logger.info("Starting segmentation pipeline", extra={"file_name": file.filename})
 
         df = pd.read_csv(file.file)
 
@@ -79,7 +79,7 @@ def segment_customers(file, db: Session):
         logger.info(
             "Preprocessing complete",
             extra={
-                "filename": file.filename,
+                "file_name": file.filename,
                 "total_rows": len(df),
             }
         )
@@ -103,7 +103,7 @@ def segment_customers(file, db: Session):
         logger.info(
             "Clustering complete",
             extra={
-                "filename": file.filename,
+                "file_name": file.filename,
                 "optimal_clusters": best_k,
                 "silhouette_score": round(best_score, 3),
             }
@@ -194,14 +194,14 @@ def segment_customers(file, db: Session):
         logger.info(
             "Segmentation results saved",
             extra={
-                "filename": file.filename,
+                "file_name": file.filename,
                 "batch_id": batch_id,
                 "total_customers": len(df),
             }
         )
 
         return {
-            "filename": file.filename,
+            "file_name": file.filename,
             "upload_batch_id": batch_id,
             "optimal_clusters": best_k,
             "silhouette_score": round(best_score, 3),
@@ -213,7 +213,7 @@ def segment_customers(file, db: Session):
         logger.warning(
             "Client error during segmentation",
             extra={
-                "filename": file.filename,
+                "file_name": file.filename,
                 "status_code": http_error.status_code,
                 "detail": http_error.detail,
             }
@@ -223,7 +223,7 @@ def segment_customers(file, db: Session):
     except Exception as e:
         logger.error(
             "Unexpected error during segmentation",
-            extra={"filename": file.filename, "error": str(e)},
+            extra={"file_name": file.filename, "error": str(e)},
             exc_info=True
         )
         raise HTTPException(status_code=500, detail=str(e))

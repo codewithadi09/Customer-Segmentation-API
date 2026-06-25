@@ -18,6 +18,8 @@ class SegmentationResult(Base):
         index=True
     )
 
+    upload_batch_id = Column(String, nullable=False, index=True)
+
     customer_name = Column(String)
 
     spending_score = Column(Integer)
